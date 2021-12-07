@@ -1,0 +1,121 @@
+﻿<Window x:Class="Wiz.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:Wiz"
+        xmlns:vm="clr-namespace:Wiz.ViewModels"
+        mc:Ignorable="d"
+        Deactivated="Window_Deactivated"
+        WindowStyle="None"
+        Height="450" Width="350">
+
+    <Window.Resources>
+        <vm:PowerButtonForegroundConverter x:Key="PowerButtonForegroundConverter" />
+        <vm:PowerButtonBackgroundConverter x:Key="PowerButtonBackgroundConverter" />
+        <vm:PowerButtonOpacityConverter x:Key="PowerButtonOpacityConverter" />
+
+        <Style x:Key="RoundButton" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Width="48" Height="48" CornerRadius="100" Background="{TemplateBinding Background}" BorderThickness="1">
+                            <Canvas Margin="10 10.5 0 0">
+                                <Path Fill="{TemplateBinding Foreground}" RenderTransformOrigin="0 0" Data="M 38.85 4.63 C 45.79 9.03 50.4 16.78 50.4 25.6 c 0 13.68 -11.08 24.77 -24.75 24.8 C 12 50.43 0.82 39.3 0.8 25.64 C 0.79 16.8 5.4 9.03 12.35 4.63 c 0.58 -0.37 1.35 -0.18 1.69 0.42 l 1.18 2.09 c 0.31 0.55 0.14 1.25 -0.39 1.59 C 9.28 12.29 5.6 18.51 5.6 25.6 c 0 11.05 8.95 20 20 20 s 20 -8.95 20 -20 c 0 -7.09 -3.68 -13.31 -9.23 -16.86 c -0.53 -0.34 -0.7 -1.04 -0.39 -1.59 l 1.18 -2.09 c 0.33 -0.61 1.11 -0.79 1.69 -0.43 z M 28 27.6 V 1.2 c 0 -0.66 -0.54 -1.2 -1.2 -1.2 h -2.4 c -0.66 0 -1.2 0.54 -1.2 1.2 v 26.4 c 0 0.66 0.54 1.2 1.2 1.2 h 2.4 c 0.66 0 1.2 -0.54 1.2 -1.2 z">
+                                    <Path.RenderTransform>
+                                        <ScaleTransform ScaleX=".5" ScaleY=".5" />
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Canvas>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="Label" TargetType="{x:Type Label}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="12 0 0 0" />
+            <Setter Property="FontFamily" Value="{StaticResource Poppins}" />
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Border
+                Background="White"
+                CornerRadius="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="80" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Image Source="/Resources/SzmurWiZ.jpeg" Grid.ColumnSpan="2" />
+
+                <Separator Grid.Row="1" Grid.ColumnSpan="2" Margin="6 0 6 0" BorderBrush="#606265" />
+
+                <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Button 
+                        x:Name="PowerButton" 
+                        Style="{StaticResource RoundButton}" 
+                        Background="{Binding Enabled, Converter={StaticResource PowerButtonBackgroundConverter}}" 
+                        Foreground="{Binding Enabled, Converter={StaticResource PowerButtonForegroundConverter}}" 
+                        Click="PowerButton_Click" 
+                        Grid.Column="1"
+                        HorizontalAlignment="Left" Margin="45 0 0 0">
+                        <Button.Effect>
+                            <DropShadowEffect Direction="270" ShadowDepth="1" BlurRadius="4" Opacity="{Binding Enabled, Converter={StaticResource PowerButtonOpacityConverter}}" />
+                        </Button.Effect>
+                    </Button>
+                </Grid>
+
+                <Separator Grid.Row="3" Grid.ColumnSpan="2" Margin="6 0 6 0" BorderBrush="#606265" />
+
+                <Label Content="Ping Interval (ms)" Grid.Row="4" Style="{StaticResource Label}" />
+                <TextBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" Margin="20 0 0 0" Text="{Binding PingInterval, Mode=TwoWay}"/>
+
+                <Label Content="Brightness" Grid.Row="5" Style="{StaticResource Label}" />
+                <Slider Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="20 0"
+                        Minimum="10" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" AutoToolTipPlacement="BottomRight"
+                        Value="{Binding Brightness, Mode=TwoWay}" />
+
+                <Label Content="Temperature" Grid.Row="6" Style="{StaticResource Label}" />
+                <Slider Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Margin="20 0"
+                        Minimum="2200" Maximum="6500" TickFrequency="10" IsSnapToTickEnabled="True" AutoToolTipPlacement="BottomRight"
+                        Value="{Binding Temperature, Mode=TwoWay}" />
+
+                <Label Content="Speed" Grid.Row="7" Style="{StaticResource Label}" />
+                <Slider Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="20 0"
+                        Minimum="10" Maximum="200" TickFrequency="1" IsSnapToTickEnabled="True" AutoToolTipPlacement="BottomRight"
+                        Value="{Binding Speed, Mode=TwoWay}" />
+
+                <Label Content="Scene" Grid.Row="8" Style="{StaticResource Label}" />
+                <ComboBox ItemsSource="{Binding Scenes}" SelectedItem="{Binding Scene}" DisplayMemberPath="Name" SelectedValuePath="ID"
+                          Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="190"/>
+
+                <Label Content="Color" Grid.Row="9" Style="{StaticResource Label}" />
+                <xctk:ColorPicker Grid.Row="9" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                  SelectedColor="{Binding LightColor, Mode=TwoWay}"
+                                  Height="20" Width="171" Margin="0 0 6 0" UsingAlphaChannel="False" />
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
